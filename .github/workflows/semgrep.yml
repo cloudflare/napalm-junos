@@ -1,25 +1,14 @@
-
+name: Semgrep CE scan
 on:
   pull_request: {}
-  workflow_dispatch: {}
-  push: 
-    branches:
-      - main
-      - master
   schedule:
-    - cron: '0 0 * * *'
-name: Semgrep config
+    - cron: '0 0 * * 6'
 jobs:
   semgrep:
-    name: semgrep/ci
-    runs-on: ubuntu-20.04
-    env:
-      SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
-      SEMGREP_URL: https://cloudflare.semgrep.dev
-      SEMGREP_APP_URL: https://cloudflare.semgrep.dev
-      SEMGREP_VERSION_CHECK_URL: https://cloudflare.semgrep.dev/api/check-version
+    name: semgrep-oss
+    runs-on: ubuntu-latest
     container:
-      image: returntocorp/semgrep
+      image: semgrep/semgrep
     steps:
-      - uses: actions/checkout@v3
-      - run: semgrep ci
+      - uses: actions/checkout@v5
+      - run: semgrep scan --config=auto
